@@ -47,19 +47,23 @@ confrontare fibonacci_result e fibonacci_result_copy, verificare che i due array
 
 unsigned long fibonacci(unsigned int n){
 
-	if(n==0)
-		return n;
-	if(n==1)
-		return n;
+	unsigned long fn =0;
+	unsigned long fn_1 = 1;
+	unsigned long fn_2 = 0;
 
-	unsigned long fn, fn_1 = 0, fn_2 = 1;
+	for(int i=0; i<n; i++){
 
-	for(int i=2; i<n; i--){
+		if(i==0)
+			fn = 0;
+		if(i==1)
+			fn=1;
+		else{
 
-		fn = fn_1 + fn_2;
+		fn = (fn_1 + fn_2);
 
 		fn_2 = fn_1;
 		fn_1 = fn;
+		}
 	}
 
 	return fn;
@@ -72,7 +76,7 @@ unsigned long * fibonacci_array(unsigned int n){
 
 	array = calloc(n+1, sizeof(unsigned long));
 
-	for(int i=0; i<n; i++){
+	for(int i=0; i<=n; i++){
 
 		array[i] = fibonacci(i);
 
@@ -100,39 +104,39 @@ unsigned long * complete_reverse_int(unsigned long * array, unsigned int array_l
 	return reverse_int(array, 0, array_len);
 }
 
-void bubble_sort(unsigned long * array, unsigned int array_dimension) {
+void bubble_sort(unsigned long * array, unsigned int caselle_array) {
 
-	int n, newn;
+	int count = 0;
 
-	n = array_dimension;
-
-	while (n > 1) {
-
-		newn = 0;
-
-		for (int i = 1; i < n; i++) {
-			if (array[i-1] > array[i]) {
-				swap_int(&array[i-1], &array[i]);
-				newn = i;
-			}
-		}
-
-		n = newn;
+	for(int i=1; i<caselle_array; i++){
+	if(array[i-1]>array[i]){
+			swap_int(&array[i-1], &array[i]);
+			count++;
 	}
-}
+	if(i == caselle_array-1 && count>0){
+		count =0;
+		i=0;
+	}
 
+}
+}
 
 int main(){
 
-	unsigned long * fibonacci_result = fibonacci_array(39);	// fibonacci(39) = 63245986
+	unsigned int num = 40;
+
+	unsigned long * fibonacci_result = fibonacci_array(num-1);	// fibonacci(39) = 63245986
 
 	unsigned long * fibonacci_result_copy;
 
-	fibonacci_result_copy = calloc(39, sizeof(unsigned long));
 
-	unsigned int num = sizeof(fibonacci_result);
+	fibonacci_result_copy = calloc(num, sizeof(unsigned long));
 
-	memcpy(fibonacci_result_copy, fibonacci_result, num);
+	//sizeof(fibonacci_result) pesa sempre 8 byte perché è un indirizzo
+
+
+
+	memcpy(fibonacci_result_copy, fibonacci_result, num*sizeof(unsigned long));
 
 	fibonacci_result_copy = complete_reverse_int(fibonacci_result_copy, num);
 
@@ -140,10 +144,37 @@ int main(){
 
 	int unic = memcmp(fibonacci_result, fibonacci_result_copy, num);
 
-	if(unic == 0)
-		printf("i due array sono uguali!");
-	else
-		printf("i due array %d e %d sono diversi", fibonacci_result, fibonacci_result_copy);
+	if(unic == 0){
+		printf("\ni due array\n");
+
+				for(int i=0; i< num; i++)
+						printf("%lu ", fibonacci_result[i]);
+
+				printf("\ne\n");
+
+				for(int i=0; i< num; i++)
+						printf("%lu ", fibonacci_result_copy[i]);
+
+				printf("\nsono uguali!");
+	}
+
+	else{
+		printf("\ni due array\n");
+
+		for(int i=0; i< num; i++)
+				printf("%lu ", fibonacci_result[i]);
+
+		printf("\ne\n");
+
+		for(int i=0; i< num; i++)
+				printf("%lu ", fibonacci_result_copy[i]);
+
+		printf("\nsono diversi!");
+	}
+
+	free(fibonacci_result_copy);
+
+	free(fibonacci_result);
 
 	return 0;
 
